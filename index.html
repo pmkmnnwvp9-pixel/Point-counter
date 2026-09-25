@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d5dfc">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Points Counter</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;padding:24px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;background:#f6f5fb;color:#17151f}
+main{width:min(420px,100%)}.card{background:#fff;border-radius:28px;padding:34px 24px;text-align:center;box-shadow:0 12px 40px #00000012}
+.label{font-size:13px;letter-spacing:.14em;opacity:.55}.points{font-size:76px;font-weight:800;line-height:1;margin:18px 0 28px}
+button{width:100%;height:58px;border:0;border-radius:17px;font-size:18px;font-weight:700;margin-top:12px;-webkit-tap-highlight-color:transparent}
+.add{background:#6d5dfc;color:white}.reset{background:#eeeef4;color:#24212d}.saved{margin-top:18px;font-size:12px;opacity:.5}
+</style>
+</head>
+<body>
+<main><section class="card">
+<div class="label">POINTS</div>
+<div id="points" class="points">0</div>
+<button class="add" id="add">+5 Points</button>
+<button class="reset" id="reset">Reset</button>
+<div class="saved">Saved automatically</div>
+</section></main>
+<script>
+const KEY="points-counter";
+let points=Number(localStorage.getItem(KEY)||0);
+if(!Number.isFinite(points)||points<0)points=0;
+const el=document.getElementById("points");
+function save(){el.textContent=points;localStorage.setItem(KEY,String(points))}
+document.getElementById("add").onclick=()=>{points+=5;save()};
+document.getElementById("reset").onclick=()=>{if(confirm("Reset your points to 0?")){points=0;save()}};
+save();
+if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body>
+</html>
